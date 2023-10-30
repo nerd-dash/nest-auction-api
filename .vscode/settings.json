@@ -1,0 +1,9 @@
+{
+    "exportall.config.folderListener": [
+        "/apps/auction-api/src/app/user",
+        "/apps/auction-api/src/app/auth/dto",
+        "/apps/auction-api/src/app/auth",
+        "/apps/auction-api/src/app/auth/guard",
+        "/apps/auction-api/src/app/auth/strategy"
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch auction-api",
+            "request": "launch",
+            "type": "node",
+            "runtimeExecutable": "npx",
+            "runtimeArgs": [
+                "nx",
+                "serve",
+                "auction-api"
+            ],
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/apps/auction-api"
+        }
+    ]
+}
