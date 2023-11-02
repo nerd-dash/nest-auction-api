@@ -14,7 +14,7 @@ import { REFRESH_TOKEN_KEY } from './auth.constants';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard, LocalAuthGuard, RefreshAuthGuard } from './guard';
 
-type RequestWithUser = Request & { user: User };
+export type RequestWithUser = Request & { user: User };
 
 @Controller('auth')
 export class AuthController {

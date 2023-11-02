@@ -8,20 +8,15 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard, LocalAuthGuard } from './guard';
 import { JwtStrategy, LocalStrategy, RefreshAuthStrategy } from './strategy';
+import { JwtConfigModule } from './config';
+
 
 @Module({
   imports: [
     PassportModule,
     UserModule,
     HashModule,
-    JwtModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        global: true,
-        secret: configService.getOrThrow<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '5m' },
-      }),
-    }),
+    JwtConfigModule
   ],
 
   controllers: [AuthController],

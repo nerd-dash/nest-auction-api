@@ -15,12 +15,8 @@ export class RefreshAuthStrategy extends PassportStrategy(
 ) {
   constructor(readonly configService: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (request: Request) => {
-          return this.getRefreshTokenFromCookie(request);
-        },
-      ]),
-
+      jwtFromRequest: (request: Request) =>
+        request?.signedCookies?.[REFRESH_TOKEN_KEY],
       ignoreExpiration: false,
       secretOrKey: configService.getOrThrow<string>('JWT_SECRET'),
     });
@@ -28,9 +24,5 @@ export class RefreshAuthStrategy extends PassportStrategy(
 
   async validate({ sub, user }: JwtPayloadDto) {
     return { sub, user };
-  }
-
-  private getRefreshTokenFromCookie(request: Request): string {
-    return request?.signedCookies?.[REFRESH_TOKEN_KEY] || null;
   }
 }

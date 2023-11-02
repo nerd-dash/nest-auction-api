@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { HashService } from '../hash';
 import { User, UserService } from '../user';
 import { JwtService } from '@nestjs/jwt';
-import { Sign } from 'crypto';
 import { SignInDto } from './dto';
 
 @Injectable()

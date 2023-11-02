@@ -21,14 +21,14 @@ export class UserService {
     return this.entityManager.transaction(
       async (transactionalEntityManager) => {
         await transactionalEntityManager.save(User, user);
+        return user;
       }
     );
   }
 
-  findAll() {
-    return `This action returns all user`;
-  }
-
+  // findAll() {
+  //   return `This action returns all user`;
+  // }
 
   findOne(user: Partial<User>) {
     return this.userRepository.findOne({
@@ -38,11 +38,11 @@ export class UserService {
     });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+  // update(id: number, updateUserDto: UpdateUserDto) {
+  //   return `This action updates a #${id} user`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+  // remove(id: number) {
+  //   return `This action removes a #${id} user`;
+  // }
 }
