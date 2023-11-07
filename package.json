@@ -2,9 +2,6 @@
   "name": "@my-workspace/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {
-    "dev": "npx nx serve"
-  },
   "private": true,
   "dependencies": {
     "@nestjs/common": "^10.0.2",
@@ -15,6 +12,7 @@
     "@nestjs/passport": "^10.0.2",
     "@nestjs/platform-express": "^10.0.2",
     "@nestjs/typeorm": "^10.0.0",
+    "@types/supertest": "^2.0.16",
     "axios": "^1.0.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",

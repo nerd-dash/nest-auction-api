@@ -10,8 +10,6 @@ import { UserModule } from './user/user.module';
     DataSourceModule,
     AuthModule,
     UserModule,
-  ],
-  controllers: [],
-  providers: [],
+  ]
 })
 export class AppModule {}

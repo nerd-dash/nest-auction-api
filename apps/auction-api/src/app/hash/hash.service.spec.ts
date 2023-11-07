@@ -1,7 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { HashService } from './hash.service';
 import { ConfigService } from '@nestjs/config';
+import { Test, TestingModule } from '@nestjs/testing';
 import * as bcrypt from 'bcrypt';
+import { HashService } from './hash.service';
 
 jest.mock('bcrypt', () => ({
   hash: jest.fn().mockResolvedValue('hashedPassword'),
@@ -10,7 +10,6 @@ jest.mock('bcrypt', () => ({
 
 describe('HashService', () => {
   let hashService: HashService;
-  let configService: ConfigService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -26,7 +25,6 @@ describe('HashService', () => {
     }).compile();
 
     hashService = module.get<HashService>(HashService);
-    configService = module.get<ConfigService>(ConfigService);
   });
 
   it('should hash password', async () => {

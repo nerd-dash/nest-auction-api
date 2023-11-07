@@ -40,4 +40,7 @@ Thumbs.db
 .nx/cache
 
 # Ignore all .env files
-**/.env
+*.env
+
+# Ignore all .sqlite files
+*.sqlite

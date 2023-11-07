@@ -1,9 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController, RequestWithUser } from './auth.controller';
-import { AuthService } from './auth.service';
 import { UnauthorizedException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { REFRESH_TOKEN_KEY } from './auth.constants';
+import { AuthController, RequestWithUser } from './auth.controller';
+import { AuthService } from './auth.service';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -16,12 +16,14 @@ describe('AuthController', () => {
         {
           provide: AuthService,
           useValue: {
-            login: jest
-              .fn()
-              .mockResolvedValue({
-                access_token: 'testToken',
-                refresh_token: 'testRefreshToken',
-              }),
+            login: jest.fn().mockResolvedValue({
+              access_token: 'testToken',
+              refresh_token: 'testRefreshToken',
+            }),
+            register: jest.fn().mockResolvedValue({
+              id: '1',
+              userName: 'test'
+            }),
           },
         },
       ],
@@ -29,6 +31,16 @@ describe('AuthController', () => {
 
     authController = module.get<AuthController>(AuthController);
     authService = module.get<AuthService>(AuthService);
+  });
+
+  it('should be able to register a new user', async () => {
+    const signUpDto = { username: 'test', password: 'test' };
+    const user = await authController.register(signUpDto);
+    expect(authService.register).toHaveBeenCalledWith(signUpDto);
+    expect(user).toEqual({
+      id: '1',
+      userName: 'test'
+    });
   });
 
   it('should login user and set refresh token cookie', async () => {

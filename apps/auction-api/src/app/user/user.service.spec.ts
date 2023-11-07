@@ -46,12 +46,12 @@ describe('UserService', () => {
     const user = await userService.create(userDto);
     expect(hashService.hash).toHaveBeenCalledWith(userDto.password);
     expect(entityManager.transaction).toHaveBeenCalled();
-    expect(user).toEqual({ userName: userDto.userName, password: 'hashedPassword' });
+    expect(user).toEqual({ userName: userDto.userName, password: undefined });
   });
 
   it('should find one user', async () => {
     const user = await userService.findOne({ userName: 'test' });
     expect(userRepository.findOne).toHaveBeenCalledWith({ where: { userName: 'test' } });
-    expect(user).toEqual({ id: '1', userName: 'test', password: 'hashedPassword' });
+    expect(user).toEqual({ id: '1', userName: 'test', password: undefined});
   });
 });

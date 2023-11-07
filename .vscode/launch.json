@@ -13,6 +13,19 @@
             ],
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/apps/auction-api"
-        }
+        },
+        {
+          "name": "Launch auction-api-e2e",
+          "request": "launch",
+          "type": "node",
+          "runtimeExecutable": "npx",
+          "runtimeArgs": [
+              "nx",
+              "run",
+              "auction-api-e2e:e2e"
+          ],
+          "console": "integratedTerminal",
+          "cwd": "${workspaceFolder}"
+      }
     ]
 }

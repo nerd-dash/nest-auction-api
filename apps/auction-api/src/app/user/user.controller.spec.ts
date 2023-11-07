@@ -13,8 +13,20 @@ describe('UserController', () => {
         {
           provide: UserService,
           useValue: {
-            create: jest.fn().mockResolvedValue({ id: '1', userName: 'test', password: 'hashedPassword' }),
-            findOne: jest.fn().mockResolvedValue({ id: '1', userName: 'test', password: 'hashedPassword' }),
+            create: jest
+              .fn()
+              .mockResolvedValue({
+                id: '1',
+                userName: 'test',
+                password: undefined,
+              }),
+            findOne: jest
+              .fn()
+              .mockResolvedValue({
+                id: '1',
+                userName: 'test',
+                password: undefined,
+              }),
           },
         },
       ],
@@ -28,12 +40,12 @@ describe('UserController', () => {
     const createUserDto = { userName: 'test', password: 'test' };
     const user = await userController.create(createUserDto);
     expect(userService.create).toHaveBeenCalledWith(createUserDto);
-    expect(user).toEqual({ id: '1', userName: 'test', password: 'hashedPassword' });
+    expect(user).toEqual({ id: '1', userName: 'test' });
   });
 
   it('should find one user', async () => {
     const user = await userController.findOne('1');
     expect(userService.findOne).toHaveBeenCalledWith({ id: '1' });
-    expect(user).toEqual({ id: '1', userName: 'test', password: 'hashedPassword' });
+    expect(user).toEqual({ id: '1', userName: 'test' });
   });
 });

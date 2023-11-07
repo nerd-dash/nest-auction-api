@@ -5,6 +5,10 @@
         "/apps/auction-api/src/app/auth",
         "/apps/auction-api/src/app/auth/guard",
         "/apps/auction-api/src/app/auth/strategy",
-        "/apps/auction-api/src/app/auth/config"
+        "/apps/auction-api/src/app/auth/config",
+        "/apps/auction-api/src/app"
+    ],
+    "exportall.config.relExclusion": [
+        "/apps/auction-api/src/app/index.ts"
     ]
 }

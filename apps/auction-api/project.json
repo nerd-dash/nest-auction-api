@@ -21,7 +21,10 @@
       },
       "configurations": {
         "development": {},
-        "production": {}
+        "production": {},
+        "e2e": {
+          "watch": true
+        }
       }
     },
     "serve": {
@@ -32,6 +35,9 @@
       },
       "configurations": {
         "development": {
+          "buildTarget": "auction-api:build:development"
+        },
+        "e2e": {
           "buildTarget": "auction-api:build:development"
         },
         "production": {
