@@ -14,7 +14,6 @@ export class AuthService {
 
   async validate({ username, password }: SignInDto) {
     const user = await this.userService.findOne({ userName: username });
-
     if (user && (await this.hashService.compare(password, user.password))) {
       delete user.password;
       return user;

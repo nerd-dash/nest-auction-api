@@ -9,10 +9,10 @@
             "runtimeArgs": [
                 "nx",
                 "serve",
-                "auction-api"
+                "auction-api:serve:development"
             ],
             "console": "integratedTerminal",
-            "cwd": "${workspaceFolder}/apps/auction-api"
+            "cwd": "${workspaceFolder}"
         },
         {
           "name": "Launch auction-api-e2e",

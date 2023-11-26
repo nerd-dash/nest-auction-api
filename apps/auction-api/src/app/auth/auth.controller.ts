@@ -5,50 +5,42 @@ import {
   Get,
   Post,
   Req,
-  Request,
   Res,
   UnauthorizedException,
-  UseGuards,
+  UseGuards
 } from '@nestjs/common';
 import { Response } from 'express';
-import { User, UserService } from '../user';
+import { User } from '../user';
 import { REFRESH_TOKEN_KEY } from './auth.constants';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard, LocalAuthGuard, RefreshAuthGuard } from './guard';
 import { SignUpDto } from './dto';
+import { LocalAuthGuard, RefreshAuthGuard } from './guard';
 
 export type RequestWithUser = Request & { user: User };
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  register(@Body() signUpDto: SignUpDto) {
-    try {
-      return this.authService.register(signUpDto);
-    }
-    catch (e) {
+  async register(@Body() signUpDto: SignUpDto) {
+    return this.authService.register(signUpDto).catch(() => {
       throw new BadRequestException();
-    }
+    });
   }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(
-    @Req() req: RequestWithUser,
-    @Res({ passthrough: true }) res: Response
-  ) {
+  async login(@Req() req: RequestWithUser, @Res() res: Response) {
     const { access_token, refresh_token } = await this.authService.login(
       req.user
     );
-    res
+    return res
       .cookie(REFRESH_TOKEN_KEY, refresh_token, {
         httpOnly: true,
         signed: true,
       })
+      .status(200)
       .send({ access_token });
   }
 
@@ -61,11 +53,5 @@ export class AuthController {
     }
 
     throw new UnauthorizedException();
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Request() req: RequestWithUser) {
-    return req.user;
   }
 }

@@ -3,12 +3,18 @@ import { UserService } from './user.service';
 import { EntityManager, Repository } from 'typeorm';
 import { HashService } from '../hash/hash.service';
 import { User } from './entities';
+import { CreateUserDto } from './dto';
 
 describe('UserService', () => {
   let userService: UserService;
   let hashService: HashService;
   let entityManager: EntityManager;
   let userRepository: Repository<User>;
+  const createUserDto: CreateUserDto = {
+    userName: 'test',
+    password: 'hashed_password',
+  };
+  const userDto: User = { id: '1', ...createUserDto };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -17,19 +23,21 @@ describe('UserService', () => {
         {
           provide: HashService,
           useValue: {
-            hash: jest.fn().mockResolvedValue('hashedPassword'),
+            hash: jest.fn().mockResolvedValue(userDto.password),
           },
         },
         {
           provide: EntityManager,
           useValue: {
-            transaction: jest.fn().mockImplementation((cb) => cb({ save: jest.fn() })),
+            transaction: jest
+              .fn()
+              .mockImplementation((cb) => cb({ save: jest.fn() })),
           },
         },
         {
           provide: 'UserRepository',
           useValue: {
-            findOne: jest.fn().mockResolvedValue({ id: '1', userName: 'test', password: 'hashedPassword' }),
+            findOne: jest.fn().mockResolvedValue(userDto),
           },
         },
       ],
@@ -41,17 +49,36 @@ describe('UserService', () => {
     userRepository = module.get<Repository<User>>('UserRepository');
   });
 
-  it('should create and save a user', async () => {
-    const userDto = { userName: 'test', password: 'test' };
-    const user = await userService.create(userDto);
-    expect(hashService.hash).toHaveBeenCalledWith(userDto.password);
-    expect(entityManager.transaction).toHaveBeenCalled();
-    expect(user).toEqual({ userName: userDto.userName, password: undefined });
+  describe('create', () => {
+    it('should create and save a user', async () => {
+      const user = await userService.create(userDto);
+      expect(hashService.hash).toHaveBeenCalledWith(userDto.password);
+      expect(entityManager.transaction).toHaveBeenCalled();
+      expect(user).toEqual({
+        userName: userDto.userName,
+        password: userDto.password,
+      });
+    });
   });
 
-  it('should find one user', async () => {
-    const user = await userService.findOne({ userName: 'test' });
-    expect(userRepository.findOne).toHaveBeenCalledWith({ where: { userName: 'test' } });
-    expect(user).toEqual({ id: '1', userName: 'test', password: undefined});
+  describe('findOne', () => {
+    it('should find one user', async () => {
+      const user = await userService.findOne({
+        userName: createUserDto.userName,
+      });
+      expect(userRepository.findOne).toHaveBeenCalledWith({
+        where: { userName: createUserDto.userName },
+      });
+      expect(user).toEqual(userDto);
+    });
+
+    it('should throw an error if user is not found', async () => {
+      jest
+        .spyOn(userRepository, 'findOne')
+        .mockResolvedValueOnce(undefined as any);
+      await expect(
+        userService.findOne({ userName: createUserDto.userName })
+      ).rejects.toThrow();
+    });
   });
 });

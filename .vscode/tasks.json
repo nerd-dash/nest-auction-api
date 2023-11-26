@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "start-server",
+      "type": "shell",
+      "command": "npx nx run auction-api:serve:development",
+      "isBackground": false,
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "start-server unit test",
+      "type": "shell",
+      "command": "npx nx run auction-api:test --watch --codeCoverage",
+      "isBackground": false,
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "start-server e2e",
+      "type": "shell",
+      "command": "npx nx run auction-api:serve:e2e",
+      "isBackground": false,
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "auction-api-e2e",
+      "type": "shell",
+      "command": "npx nx run auction-api-e2e:e2e --codeCoverage",
+      "isBackground": false,
+      "problemMatcher": [],
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
+}

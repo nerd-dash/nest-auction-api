@@ -1,11 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Catch, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import {
+  EntityManager,
+  EntityNotFoundError,
+  QueryFailedError,
+  Repository,
+} from 'typeorm';
 import { HashService } from '../hash';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities';
 
 @Injectable()
+@Catch(QueryFailedError, EntityNotFoundError)
 export class UserService {
   constructor(
     @InjectRepository(User)
@@ -20,7 +26,7 @@ export class UserService {
     return await this.entityManager.transaction(
       async (transactionalEntityManager) => {
         await transactionalEntityManager.save(User, user);
-        return { ...user, password: undefined };
+        return user;
       }
     );
   }
@@ -30,17 +36,13 @@ export class UserService {
   // }
 
   async findOne(user: Partial<User>) {
-    const foundUser = await this.userRepository.findOne({
-      where: {
-        ...user,
-      },
-    });
-
-    if (!foundUser) {
-      throw new NotFoundException();
-    }
-
-    return { ...foundUser, password: undefined };
+    return await this.userRepository
+      .findOne({
+        where: {
+          ...user,
+        },
+      })
+      .then((user) => user || Promise.reject(new NotFoundException()));
   }
 
   // update(id: number, updateUserDto: UpdateUserDto) {

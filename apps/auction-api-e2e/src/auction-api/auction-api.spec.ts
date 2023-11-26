@@ -13,40 +13,50 @@ describe('Auction-api /api', () => {
   beforeAll(async () => {
     await testDataSource.initialize();
 
-  });
-
-  afterAll(async () => {
-
     const entities = testDataSource.entityMetadatas;
 
     for (const entity of entities) {
-        const repository = testDataSource.getRepository(entity.name); // Get repository
-        await repository.clear(); // Clear each entity table's content
-        console.log('entity', entity);
+      const repository = testDataSource.getRepository(entity.name); // Get repository
+      await repository.clear(); // Clear each entity table's content
     }
+  });
+
+  afterAll(async () => {
     await testDataSource.destroy();
   });
 
   describe('Auth Controller', () => {
-    it('POST /auth/register - should create a new user and return a token', async () => {
-      const res = await axios.post(`/auth/register`, {
-        username: 'newuser', // replace with a new username
-        password: 'newpassword', // replace with a new password
+    describe('register', () => {
+      it('POST /auth/register - should create a new user and return a token', async () => {
+        const res = await axios.post(`/auth/register`, {
+          username: 'test_user', // replace with a new username
+          password: 'test_password', // replace with a new password
+        });
+
+        expect(res.status).toBe(201);
+        expect(res.data).toHaveProperty('id');
+        expect(res.data).toHaveProperty('userName');
       });
 
-      expect(res.status).toBe(201);
-      expect(res.data).toHaveProperty('id');
-      expect(res.data).toHaveProperty('userName');
+      it('POST /auth/register - should return a 400 if the username is already taken', async () => {
+        try {
+          await axios.post(`/auth/register`, {
+            username: 'test_user', // replace with a username that already exists
+            password: 'test_password', // replace with a new password
+          });
+        } catch (err) {
+          expect(err.response.status).toBe(400);
+        }
+      });
     });
 
     it('POST /auth/login - should return a token when provided valid credentials', async () => {
       const res = await axios.post(`/auth/login`, {
-        username: 'testuser', // replace with a valid username
-        password: 'testpassword', // replace with a valid password
+        username: 'test_user', // replace with a valid username
+        password: 'test_password', // replace with a valid password
       });
-
       expect(res.status).toBe(200);
-      expect(res.data).toHaveProperty('token');
+      expect(res.data).toHaveProperty('access_token');
     });
   });
 });

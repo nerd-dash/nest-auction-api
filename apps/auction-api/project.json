@@ -23,7 +23,7 @@
         "development": {},
         "production": {},
         "e2e": {
-          "watch": true
+          "watchAll": true
         }
       }
     },
